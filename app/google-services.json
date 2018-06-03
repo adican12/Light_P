@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "129741026288-8dq3nh5netm7su30hb43utrq4qndb80t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yarde.light_p",
+            "certificate_hash": "aaac74bf8be67f6ad23a6bf923f7e36e9f5f65ea"
+          }
+        },
+        {
           "client_id": "129741026288-snac2bt9htsmp8lvgts2ihq2d0gfa6nd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
