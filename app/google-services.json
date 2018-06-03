@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "129741026288",
+    "firebase_url": "https://lightp-ef920.firebaseio.com",
+    "project_id": "lightp-ef920",
+    "storage_bucket": "lightp-ef920.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129741026288:android:222aa106078e895b",
+        "android_client_info": {
+          "package_name": "com.example.yarde.light_p"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129741026288-snac2bt9htsmp8lvgts2ihq2d0gfa6nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yarde.light_p",
+            "certificate_hash": "ca471322ce9c95b757f2dccfcb784fa157344b57"
+          }
+        },
+        {
+          "client_id": "129741026288-8s7gn54u4ebmb39gppgp8ckppr5gi2iq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "129741026288-8s7gn54u4ebmb39gppgp8ckppr5gi2iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXizC0Rht-JVpDccWkzvcDWfQy821mJCs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129741026288-8s7gn54u4ebmb39gppgp8ckppr5gi2iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
