@@ -138,19 +138,18 @@ public class SensorActivity extends Activity implements SensorEventListener {
 //
 
     public void onClick(View view){
-        int i = 0;
+        //int i = 0;
         FirebaseDatabase database = FirebaseDatabase.getInstance();//work version
         //DatabaseReference myRef = database.getReference("message");//work version
         DatabaseReference myRef = database.getReference("root");//check version
-
         mLightSensor = Sensor.TYPE_LIGHT;
         Data data = new Data(mLightSensor);
         //DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();//work version
         //mdatabase.child("data").setValue(data);
 //
-        myRef.child("data : "+ i).setValue(data);
+        myRef.getRoot().child("data : ").setValue(data);
 
-        ++i;
+        //++i;
 
 //        writeNewUser();
 
@@ -158,5 +157,8 @@ public class SensorActivity extends Activity implements SensorEventListener {
         //myRef1.setValue(textView.getText());
 
     }
+
+
+
 }
 
