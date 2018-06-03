@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.yarde.light_p.Light_program.Data;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,6 +29,7 @@ public class SensorActivity extends Activity implements SensorEventListener {
     TextView textView;  //text view for result
     TextView dataReceived;
     //FirebaseDatabase mRef;
+    int mLightSensor ;
 
     //MQTTHelper mqttHelper;
     private Button Report_data;
@@ -88,6 +91,7 @@ public class SensorActivity extends Activity implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {  //check changed
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             textView.setText("" + event.values[0]);  //update text view
+
         }
         if (event.sensor.getType() == sensorGPS.TYPE_MAGNETIC_FIELD) {
             dataReceived.setText("" + event.values[0]);
@@ -123,16 +127,34 @@ public class SensorActivity extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
-
+//
+//    private void writeNewUser(String lightSensor) {
+//        Data data = new Data(lightSensor);
+//        DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();//work version
+//        mdatabase.child("data").setValue(data);
+//
+//    }
+//
+//
 
     public void onClick(View view){
-
+        int i = 0;
         FirebaseDatabase database = FirebaseDatabase.getInstance();//work version
-        DatabaseReference myRef = database.getReference("message");//work version
-        //DatabaseReference myRef1 = database.getReference("message1");//work version
+        //DatabaseReference myRef = database.getReference("message");//work version
+        DatabaseReference myRef = database.getReference("root");//check version
 
+        mLightSensor = Sensor.TYPE_LIGHT;
+        Data data = new Data(mLightSensor);
+        //DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();//work version
+        //mdatabase.child("data").setValue(data);
+//
+        myRef.child("data : "+ i).setValue(data);
 
-        myRef.setValue(textView.getText());
+        ++i;
+
+//        writeNewUser();
+
+        //myRef.setValue(textView.getText());
         //myRef1.setValue(textView.getText());
 
     }
