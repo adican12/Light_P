@@ -1,21 +1,24 @@
 package com.example.yarde.light_p;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.hardware.*;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.yarde.light_p.helpers.MQTTHelper;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+//import com.example.yarde.light_p.helpers.MQTTHelper;
+
+//import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+//import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+//import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class SensorActivity extends Activity implements SensorEventListener {
 
@@ -23,7 +26,9 @@ public class SensorActivity extends Activity implements SensorEventListener {
     Sensor sensor;
     TextView textView;  //text view for result
     TextView dataReceived;
-    MQTTHelper mqttHelper;
+    //MQTTHelper mqttHelper;
+    private Button Report_data;
+
 
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,35 +41,43 @@ public class SensorActivity extends Activity implements SensorEventListener {
         textView = (TextView) findViewById(R.id.textView);  // show deatils
         dataReceived = (TextView) findViewById(R.id.dataReceived);
 
-        startMqtt();
+        Report_data = (Button) findViewById(R.id.repord_data);
+
+  //      startMqtt();
     }
-    private void startMqtt() {
-        mqttHelper = new MQTTHelper(getApplicationContext());
-        mqttHelper.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean b, String s) {
-
-            }
-
-            @Override
-            public void connectionLost(Throwable throwable) {
-
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-                Log.w("Debug", mqttMessage.toString());
-                dataReceived.setText(mqttMessage.toString());
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-
-            }
-        });
 
 
-    }
+
+//    private void startMqtt() {
+//        mqttHelper = new MQTTHelper(getApplicationContext());
+//        mqttHelper.setCallback(new MqttCallbackExtended() {
+//            @Override
+//            public void connectComplete(boolean b, String s) {
+//
+//            }
+//
+//            @Override
+//            public void connectionLost(Throwable throwable) {
+//
+//            }
+//
+//            @Override
+//            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+//                Log.w("Debug", mqttMessage.toString());
+//                dataReceived.setText(mqttMessage.toString());
+//            }
+//
+//            @Override
+//            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+//
+//            }
+//        });
+//
+
+//    }
+
+
+
     @Override
     public void onSensorChanged(SensorEvent event) {  //check changed
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
@@ -101,5 +114,12 @@ public class SensorActivity extends Activity implements SensorEventListener {
 
 
 
+    public void onClick(View view){
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue(textView.getText());
+    }
 }
 
