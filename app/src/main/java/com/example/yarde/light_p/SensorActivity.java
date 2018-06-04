@@ -13,16 +13,20 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.yarde.light_p.Light_program.Data;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SensorActivity extends Activity implements SensorEventListener {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private SensorManager mSensorManager;
     Sensor sensor;
@@ -48,6 +52,10 @@ public class SensorActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);  //accses to senspr manger
 //        sensorGPS = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);   // choose sensor
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);   // choose sensor
@@ -66,11 +74,22 @@ public class SensorActivity extends Activity implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             textView.setText("" + event.values[0]);  //update text view
 
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            longitude = loc.getLongitude();
+            altitude = loc.getLatitude();
+//            Log.d("myapp","altitude: "+(int)altitude + "  longitude: "+longitude );
+//            dataReceived.setText(" "+  altitude  + " " + longitude);
         }
-//        if (event.sensor.getType() == sensorGPS.TYPE_MAGNETIC_FIELD) {
-//            dataReceived.setText("" + event.values[0]);
-//        }
-
 
     }
 
@@ -102,30 +121,39 @@ public class SensorActivity extends Activity implements SensorEventListener {
 
 
     public void onClick(View view) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //
-        // require premission to check location services
-        //
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        longitude = loc.getLongitude();
-        altitude = loc.getLatitude();
 
-        sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);   // choose sensor
-        mLightSensor=sensor.getPower();
+        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "3");
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "adi");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-        Data _data = new Data(mLightSensor);
+        //        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        //
+//        // require premission to check location services
+//        //
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        longitude = loc.getLongitude();
+//        altitude = loc.getLatitude();
+//
+//        sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);   // choose sensor
+//        mLightSensor=sensor.getPower();
+//
+////        Data _data = new Data();
 //        Data _data = new Data(mLightSensor,longitude,altitude );
-        mDatabase.child("Data").child(String.valueOf(i++)).setValue(_data);
+//        mDatabase.child("Data").child(String.valueOf(i++)).setValue(_data);
 
     }
 }
