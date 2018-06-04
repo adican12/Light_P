@@ -66,14 +66,14 @@ public class SensorActivity extends Activity implements SensorEventListener {
         dataReceived = (TextView) findViewById(R.id.dataReceived);
 
         Report_data = (Button) findViewById(R.id.repord_data);
-
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {  //check changed
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             textView.setText("" + event.values[0]);  //update text view
-
+            mLightSensor=event.values[0];
+/*
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -89,6 +89,7 @@ public class SensorActivity extends Activity implements SensorEventListener {
             altitude = loc.getLatitude();
 //            Log.d("myapp","altitude: "+(int)altitude + "  longitude: "+longitude );
 //            dataReceived.setText(" "+  altitude  + " " + longitude);
+  */
         }
 
     }
@@ -122,13 +123,17 @@ public class SensorActivity extends Activity implements SensorEventListener {
 
     public void onClick(View view) {
 
+        dataReceived.setText(""+Float.toString(mLightSensor));
+
         Bundle bundle = new Bundle();
-//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "3");
-//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "adi");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+//        bundle.putString(FirebaseAnalytics.Float.toString(mLightSensor)Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(i++) );
+        bundle.putString(FirebaseAnalytics.Param.VALUE, Float.toString(mLightSensor));
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "adi");
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+
 
         //        mDatabase = FirebaseDatabase.getInstance().getReference();
 //        //
