@@ -19,10 +19,9 @@ public class SensorActivity extends Activity implements SensorEventListener {
     Sensor sensor;
     float mLightSensor;
     int i = 0;
-    TextView textView;  //text view for result
+    TextView textView;                                                              //text view for result
     TextView dataReceived;
     Button Report_data;
-
 
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
