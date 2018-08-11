@@ -7,10 +7,22 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 
 public class SensorActivity extends Activity implements SensorEventListener {
@@ -22,6 +34,7 @@ public class SensorActivity extends Activity implements SensorEventListener {
     TextView textView;                                                              //text view for result
     TextView dataReceived;
     Button Report_data;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +81,26 @@ public class SensorActivity extends Activity implements SensorEventListener {
 
     public void onClick(View view) {
         dataReceived.setText(""+Float.toString(mLightSensor));                          // update dataReceived textView
-        Bundle bundle = new Bundle();                                                   // new bundle
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(i++) );      // enter id
-        bundle.putString(FirebaseAnalytics.Param.VALUE, Float.toString(mLightSensor));  // enter the Lux meter
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);    // send to firebase bundle
+
+        // Create a new sensorRead with a name and read
+        Map<String, Object> sensorRead = new HashMap<>();
+        sensorRead.put("name", "yarden");
+        sensorRead .put("value", Float.toString(mLightSensor));
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .add(sensorRead )
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 }
